@@ -42,30 +42,42 @@ class SampleHandler: RPBroadcastSampleHandler {
 
                 // Create a CIImage from the image buffer
                 let ciImage = CIImage(cvImageBuffer: imageBuffer)
-
-                // Create a CIContext - it can be reused for performance
-                let context = CIContext(options: nil)
-
-                // Create a CGImage from the CIImage
-                guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else {
-                    NSLog("Failed to guard let cgImage")
-                    return }
-
-                // Create a UIImage from the CGImage
-                let uiImage = UIImage(cgImage: cgImage)
             
-            guard let jpegData = uiImage.jpegData(compressionQuality: 0.5) else {
-                NSLog("failed to guard let jpeg data")
-                return
+            let scaleFactor = CGFloat(0.7)
+            let scaleTransform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
+            
+            if let scaleFilter = CIFilter(name: "CIAffineTransform") {
+                scaleFilter.setValue(ciImage, forKey: kCIInputImageKey)
+                scaleFilter.setValue(scaleTransform, forKey: kCIInputTransformKey)
+
+                if let scaledImage = scaleFilter.outputImage {
+                    // Create a CIContext - it can be reused for performance
+                    let context = CIContext(options: nil)
+
+                    // Create a CGImage from the CIImage
+                    guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
+                        NSLog("Failed to guard let cgImage")
+                        return }
+
+                    // Create a UIImage from the CGImage
+                    let uiImage = UIImage(cgImage: cgImage)
+                
+                    guard let jpegData = uiImage.jpegData(compressionQuality: 0.9) else {
+                    NSLog("failed to guard let jpeg data")
+                    return
+                }
+                mySocketServer?.sendDataToAllClients(jpegData)
+                }
             }
-            mySocketServer?.sendDataToAllClients(jpegData)
+
+                
             // Handle video sample buffer
             break
-        case RPSampleBufferType.audioApp:
-            // Handle audio sample buffer for app audio
+        case .audioApp:
+            //nothing
             break
-        case RPSampleBufferType.audioMic:
-            // Handle audio sample buffer for mic audio
+        case .audioMic:
+            //nothing
             break
         @unknown default:
             // Handle other sample buffer types
