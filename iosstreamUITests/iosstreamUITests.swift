@@ -19,14 +19,51 @@ final class iosstreamUITests: XCTestCase {
     override func tearDownWithError() throws {
         
     }
+    
+    func getDeviceModelNumber() -> (Double, Bool){
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        print(identifier)
+        let trimmedString = identifier.replacingOccurrences(of: "iPhone", with: "")
+        let formattedString = trimmedString.replacingOccurrences(of: ",", with: ".")
+        if let finalNumber = Double(formattedString) {
+            return (finalNumber, true)
+        } else {
+            return (0.0, false)
+        }
+    }
+    
 
     func testStartBroadcast() throws {
         // Go to Springboard(Home)
+        // Do it twice just in case
+        XCUIDevice.shared.press(XCUIDevice.Button.home)
         XCUIDevice.shared.press(XCUIDevice.Button.home)
         
-        openControlCenter()
+        let interfaceIdiom = UIDevice.current.userInterfaceIdiom.rawValue
+        if interfaceIdiom == 1 {
+            print("Device is an iPad, opening Control Center from the top right")
+            openTopControlCenter()
+        } else {
+            let (model, ok) = getDeviceModelNumber()
+            XCTAssertTrue(ok, "Could not get device model number to determine how to open the control center")
+            if model >= 10.3 {
+                print("Device is an iPhone X or above, opening Control Center from the top right")
+                openTopControlCenter()
+            } else {
+                print("Device is an iPhone 8 or below, opening Control center from the bottom")
+                openControlCenter()
+            }
+        }
+        
         sleep(1)
         let recordingBtn = app.buttons["Screen Recording"]
+        XCTAssertTrue(recordingBtn.exists, "Recording is not added to the device Control Center, please add it from Settings > Control Center!")
         if recordingBtn.isSelected {
             print("Recording is already in progress, stopping it")
             recordingBtn.tap()
@@ -42,6 +79,7 @@ final class iosstreamUITests: XCTestCase {
         XCUIDevice.shared.press(XCUIDevice.Button.home)
         sleep(1)
         print(app.debugDescription)
+        UIDevice.current.userInterfaceIdiom.rawValue
     }
     
     func openRecording() {
@@ -53,7 +91,6 @@ final class iosstreamUITests: XCTestCase {
     
     func selectBroadcastApp() {
         self.executeUnderReflectionIdleHack {
-            print(app.debugDescription)
             let scrollView = app.scrollViews.element(boundBy: 2)
             let broadCastSelectBtn = scrollView.buttons["broadcast"]
             if broadCastSelectBtn.isSelected {
@@ -75,6 +112,14 @@ final class iosstreamUITests: XCTestCase {
         self.executeUnderReflectionIdleHack {
             let coord1 = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.99))
             let coord2 = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.7))
+            coord1.press(forDuration: 0.1, thenDragTo: coord2)
+        }
+    }
+    
+    func openTopControlCenter() {
+        self.executeUnderReflectionIdleHack {
+            let coord1 = app.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.01))
+            let coord2 = app.coordinate(withNormalizedOffset: CGVector(dx: 0.9, dy: 0.5))
             coord1.press(forDuration: 0.1, thenDragTo: coord2)
         }
     }
