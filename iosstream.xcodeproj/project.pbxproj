@@ -20,6 +20,7 @@
 		FF6A002A2B6900BC00CEB5A2 /* broadcast.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FF6A00112B6900BB00CEB5A2 /* broadcast.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FF6A00342B69014D00CEB5A2 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = FF6A00332B69014D00CEB5A2 /* CocoaAsyncSocket */; };
 		FF6A00362B69017B00CEB5A2 /* SocketServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6A00352B69017B00CEB5A2 /* SocketServer.swift */; };
+		FF7A64DD2B78F16C00B3EC3B /* iosstreamUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7A64DC2B78F16C00B3EC3B /* iosstreamUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FF6A00102B6900BA00CEB5A2;
 			remoteInfo = broadcast;
+		};
+		FF7A64E02B78F16C00B3EC3B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF6AFFF42B69009700CEB5A2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF6AFFFB2B69009700CEB5A2;
+			remoteInfo = iosstream;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -69,6 +77,8 @@
 		FF6A00352B69017B00CEB5A2 /* SocketServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketServer.swift; sourceTree = "<group>"; };
 		FF6AFFFC2B69009700CEB5A2 /* iosstream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosstream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF6AFFFF2B69009700CEB5A2 /* iosstreamApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosstreamApp.swift; sourceTree = "<group>"; };
+		FF7A64DA2B78F16C00B3EC3B /* iosstreamUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iosstreamUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF7A64DC2B78F16C00B3EC3B /* iosstreamUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosstreamUITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +101,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		FF6AFFF92B69009700CEB5A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF7A64D72B78F16C00B3EC3B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -142,6 +159,7 @@
 				FF6AFFFE2B69009700CEB5A2 /* iosstream */,
 				FF6A00152B6900BB00CEB5A2 /* broadcast */,
 				FF6A00212B6900BC00CEB5A2 /* broadcastSetupUI */,
+				FF7A64DB2B78F16C00B3EC3B /* iosstreamUITests */,
 				FF6A00122B6900BB00CEB5A2 /* Frameworks */,
 				FF6AFFFD2B69009700CEB5A2 /* Products */,
 			);
@@ -153,6 +171,7 @@
 				FF6AFFFC2B69009700CEB5A2 /* iosstream.app */,
 				FF6A00112B6900BB00CEB5A2 /* broadcast.appex */,
 				FF6A001D2B6900BC00CEB5A2 /* broadcastSetupUI.appex */,
+				FF7A64DA2B78F16C00B3EC3B /* iosstreamUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,6 +185,14 @@
 				FF6A00052B69009900CEB5A2 /* Preview Content */,
 			);
 			path = iosstream;
+			sourceTree = "<group>";
+		};
+		FF7A64DB2B78F16C00B3EC3B /* iosstreamUITests */ = {
+			isa = PBXGroup;
+			children = (
+				FF7A64DC2B78F16C00B3EC3B /* iosstreamUITests.swift */,
+			);
+			path = iosstreamUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +255,24 @@
 			productReference = FF6AFFFC2B69009700CEB5A2 /* iosstream.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FF7A64D92B78F16C00B3EC3B /* iosstreamUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF7A64E42B78F16C00B3EC3B /* Build configuration list for PBXNativeTarget "iosstreamUITests" */;
+			buildPhases = (
+				FF7A64D62B78F16C00B3EC3B /* Sources */,
+				FF7A64D72B78F16C00B3EC3B /* Frameworks */,
+				FF7A64D82B78F16C00B3EC3B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF7A64E12B78F16C00B3EC3B /* PBXTargetDependency */,
+			);
+			name = iosstreamUITests;
+			productName = iosstreamUITests;
+			productReference = FF7A64DA2B78F16C00B3EC3B /* iosstreamUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -246,6 +291,10 @@
 					};
 					FF6AFFFB2B69009700CEB5A2 = {
 						CreatedOnToolsVersion = 15.2;
+					};
+					FF7A64D92B78F16C00B3EC3B = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = FF6AFFFB2B69009700CEB5A2;
 					};
 				};
 			};
@@ -268,6 +317,7 @@
 				FF6AFFFB2B69009700CEB5A2 /* iosstream */,
 				FF6A00102B6900BA00CEB5A2 /* broadcast */,
 				FF6A001C2B6900BC00CEB5A2 /* broadcastSetupUI */,
+				FF7A64D92B78F16C00B3EC3B /* iosstreamUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -293,6 +343,13 @@
 			files = (
 				FF6A00072B69009900CEB5A2 /* Preview Assets.xcassets in Resources */,
 				FF6A00042B69009900CEB5A2 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF7A64D82B78F16C00B3EC3B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +382,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FF7A64D62B78F16C00B3EC3B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF7A64DD2B78F16C00B3EC3B /* iosstreamUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -337,6 +402,11 @@
 			isa = PBXTargetDependency;
 			target = FF6A00102B6900BA00CEB5A2 /* broadcast */;
 			targetProxy = FF6A00282B6900BC00CEB5A2 /* PBXContainerItemProxy */;
+		};
+		FF7A64E12B78F16C00B3EC3B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF6AFFFB2B69009700CEB5A2 /* iosstream */;
+			targetProxy = FF7A64E02B78F16C00B3EC3B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -626,6 +696,42 @@
 			};
 			name = Release;
 		};
+		FF7A64E22B78F16C00B3EC3B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z7FLMTR679;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shamanec.iosstreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iosstream;
+			};
+			name = Debug;
+		};
+		FF7A64E32B78F16C00B3EC3B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z7FLMTR679;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shamanec.iosstreamUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iosstream;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -661,6 +767,15 @@
 			buildConfigurations = (
 				FF6A00082B69009900CEB5A2 /* Debug */,
 				FF6A00092B69009900CEB5A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF7A64E42B78F16C00B3EC3B /* Build configuration list for PBXNativeTarget "iosstreamUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF7A64E22B78F16C00B3EC3B /* Debug */,
+				FF7A64E32B78F16C00B3EC3B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
