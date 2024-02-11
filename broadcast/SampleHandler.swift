@@ -10,9 +10,13 @@ import CoreImage
 
 class SampleHandler: RPBroadcastSampleHandler {
     var mySocketServer: SocketServer?
+    private var context: CIContext?
     
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
         super.broadcastStarted(withSetupInfo: setupInfo)
+        // Create a CIContext - it can be reused for performance
+        // Creating a new one on each sample buffer is too expensive and reduces performance a lot
+        context = CIContext(options: nil)
         // Create and start a socket server
         mySocketServer = SocketServer()
         mySocketServer?.startServer(onPort: 9500)
@@ -73,19 +77,9 @@ class SampleHandler: RPBroadcastSampleHandler {
                 
                 // Scale the image into a new object
                 if let scaledImage = scaleFilter.outputImage {
-                    // Create a CIContext - it can be reused for performance
-                    let context = CIContext(options: nil)
-                    
-                    // Create a CGImage from the CIImage
-                    guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
-                        NSLog("Koleo: Failed to guard let cgImage")
-                        return }
-                    
-                    // Create a UIImage from the CGImage
-                    let uiImage = UIImage(cgImage: cgImage)
-                    
-                    // Convert the UIImage to a jpeg data represantation with particular quality
-                    guard let jpegData = uiImage.jpegData(compressionQuality: 0.9) else {
+                    let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
+                    guard let jpegData = context!.jpegRepresentation(of: scaledImage, colorSpace: colorSpace, options: [kCGImageDestinationLossyCompressionQuality
+                                                                                                                       as CIImageRepresentationOption : 0.9]) else {
                         NSLog("Koleo: failed to guard let jpeg data")
                         return
                     }
