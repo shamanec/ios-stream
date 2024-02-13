@@ -40,6 +40,11 @@ class SampleHandler: RPBroadcastSampleHandler {
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
         switch sampleBufferType {
         case RPSampleBufferType.video:
+            // Do not spend device resources to handle frames
+            // If no clients are connected
+            if mySocketServer?.connectedSockets.isEmpty != nil {
+                return
+            }
             // Get the image buffer from the sample buffer
             guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
                 NSLog("Koleo: Failed to guard let imageBuffer")
@@ -67,7 +72,7 @@ class SampleHandler: RPBroadcastSampleHandler {
             ciImage = ciImage.oriented(imgOrientation)
             
             // Create the scale factor and transform objects
-            let scaleFactor = CGFloat(0.7)
+            let scaleFactor = CGFloat(0.5)
             let scaleTransform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
             
             // Check if the filter exists and set the image and transform
