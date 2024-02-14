@@ -42,7 +42,8 @@ class SampleHandler: RPBroadcastSampleHandler {
         case RPSampleBufferType.video:
             // Do not spend device resources to handle frames
             // If no clients are connected
-            if mySocketServer?.connectedSockets.isEmpty != nil {
+            if mySocketServer?.connectedSockets.count == 0 {
+                NSLog("Koleo: No clients")
                 return
             }
             // Get the image buffer from the sample buffer
