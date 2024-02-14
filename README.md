@@ -1,1 +1,2 @@
 # ios-stream
+WIP broadcast app for iOS devices meant for [GADS](https://github.com/shamanec/GADS) - serves frames as jpeg data over TCP connection. You need to properly read the data from the TCP connection to distinguish the images and you can do whatever you want with them(something like [this](https://github.com/shamanec/GADS-devices-provider/blob/0bba4d8fb96cf3138a9d6763bd52a754356f04aa/router/stream.go#L77) - serve them as MJPEG stream, or over websocket, or get a "screenshot", etc
