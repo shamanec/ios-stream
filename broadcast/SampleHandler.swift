@@ -11,6 +11,10 @@ import CoreImage
 class SampleHandler: RPBroadcastSampleHandler {
     var mySocketServer: SocketServer?
     private var context: CIContext?
+    private var scaleFilter: CIFilter?
+    private var scaleTransform: CGAffineTransform?
+    // Create the scale factor and transform objects
+    let scaleFactor = CGFloat(0.9)
     
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
         super.broadcastStarted(withSetupInfo: setupInfo)
@@ -20,6 +24,9 @@ class SampleHandler: RPBroadcastSampleHandler {
         // Create and start a socket server
         mySocketServer = SocketServer()
         mySocketServer?.startServer(onPort: 9500)
+        scaleFilter = CIFilter(name: "CIAffineTransform")
+        scaleTransform = CGAffineTransform(scaleX: self.scaleFactor, y: self.scaleFactor)
+        scaleFilter!.setValue(scaleTransform, forKey: kCIInputTransformKey)
     }
     
     override func broadcastPaused() {
@@ -46,53 +53,46 @@ class SampleHandler: RPBroadcastSampleHandler {
                 NSLog("Koleo: No clients")
                 return
             }
-            // Get the image buffer from the sample buffer
-            guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-                NSLog("Koleo: Failed to guard let imageBuffer")
-                return
-            }
             
-            // Set default image orientation
-            var imgOrientation: CGImagePropertyOrientation = .up
-            // Try to determine the actual image orientation
-            if let orientationAttachment = CMGetAttachment(sampleBuffer, key: RPVideoSampleOrientationKey as CFString, attachmentModeOut: nil) as? NSNumber {
-                if let orientation = CGImagePropertyOrientation(rawValue: orientationAttachment.uint32Value) {
-                    switch orientation {
-                    case .up,    .upMirrored:    imgOrientation = .up
-                    case .down,  .downMirrored:  imgOrientation = .down
-                    case .left,  .leftMirrored:  imgOrientation = .right
-                    case .right, .rightMirrored: imgOrientation = .left
-                    default:   break
+            autoreleasepool {
+                // Get the image buffer from the sample buffer
+                guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+                    NSLog("Koleo: Failed to guard let imageBuffer")
+                    return
+                }
+                
+                // Set default image orientation
+                var imgOrientation: CGImagePropertyOrientation = .up
+                // Try to determine the actual image orientation
+                if let orientationAttachment = CMGetAttachment(sampleBuffer, key: RPVideoSampleOrientationKey as CFString, attachmentModeOut: nil) as? NSNumber {
+                    if let orientation = CGImagePropertyOrientation(rawValue: orientationAttachment.uint32Value) {
+                        switch orientation {
+                        case .up,    .upMirrored:    imgOrientation = .up
+                        case .down,  .downMirrored:  imgOrientation = .down
+                        case .left,  .leftMirrored:  imgOrientation = .right
+                        case .right, .rightMirrored: imgOrientation = .left
+                        default:   break
+                        }
                     }
                 }
-            }
-            
-            // Create a CIImage from the image buffer
-            var ciImage = CIImage(cvImageBuffer: imageBuffer)
-            // Orient the CIImage according to the current sampleBuffer image orientation
-            ciImage = ciImage.oriented(imgOrientation)
-            
-            // Create the scale factor and transform objects
-            let scaleFactor = CGFloat(0.5)
-            let scaleTransform = CGAffineTransform(scaleX: scaleFactor, y: scaleFactor)
-            
-            // Check if the filter exists and set the image and transform
-            if let scaleFilter = CIFilter(name: "CIAffineTransform") {
-                scaleFilter.setValue(ciImage, forKey: kCIInputImageKey)
-                scaleFilter.setValue(scaleTransform, forKey: kCIInputTransformKey)
                 
+                // Create a CIImage from the image buffer
+                var ciImage = CIImage(cvImageBuffer: imageBuffer)
+                // Orient the CIImage according to the current sampleBuffer image orientation
+                ciImage = ciImage.oriented(imgOrientation)
+                
+                scaleFilter!.setValue(ciImage, forKey: kCIInputImageKey)
                 // Scale the image into a new object
-                if let scaledImage = scaleFilter.outputImage {
+                if let scaledImage = scaleFilter!.outputImage {
                     let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
                     guard let jpegData = context!.jpegRepresentation(of: scaledImage, colorSpace: colorSpace, options: [kCGImageDestinationLossyCompressionQuality
-                                                                                                                       as CIImageRepresentationOption : 0.9]) else {
+                                                                                                                        as CIImageRepresentationOption : 0.9]) else {
                         NSLog("Koleo: failed to guard let jpeg data")
                         return
                     }
                     mySocketServer?.sendDataToAllClients(jpegData)
                 }
             }
-            
             
             // Handle video sample buffer
             break
