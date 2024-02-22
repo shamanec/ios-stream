@@ -33,6 +33,13 @@ class SocketServer: NSObject, GCDAsyncSocketDelegate {
         newSocket.readData(withTimeout: -1, tag: 0)
     }
     
+    func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
+        if let index = connectedSockets.firstIndex(of: sock) {
+            print("Socket disconnected: \(sock.connectedHost ?? ""):\(sock.connectedPort)")
+            connectedSockets.remove(at: index)
+        }
+    }
+    
     func sendDataToAllClients(_ data: Data) {
             for clientSocket in connectedSockets {
                 clientSocket.write(data, withTimeout: -1, tag: 0)
