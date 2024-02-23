@@ -52,7 +52,7 @@ final class iosstreamUITests: XCTestCase {
         } else {
             let (model, ok) = getDeviceModelNumber()
             XCTAssertTrue(ok, "Could not get device model number to determine how to open the control center")
-            if model >= 10.3 && model != 12.8 && model != 14.6 {
+            if model >= 10.3 && model != 12.8 && model != 14.6 && model != 10.4 && model != 10.5 {
                 print("Device is an iPhone X or above, opening Control Center from the top right")
                 openTopControlCenter()
             } else {
