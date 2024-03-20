@@ -54,6 +54,11 @@ class SampleHandler: RPBroadcastSampleHandler {
                 return
             }
             
+            if !(mySocketServer?.sendAcknowledged ?? false) {
+                NSLog("Koleo: Not acknowledged")
+                return
+            }
+            
             autoreleasepool {
                 // Get the image buffer from the sample buffer
                 guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
@@ -86,11 +91,12 @@ class SampleHandler: RPBroadcastSampleHandler {
                 if let scaledImage = scaleFilter!.outputImage {
                     let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
                     guard let jpegData = context!.jpegRepresentation(of: scaledImage, colorSpace: colorSpace, options: [kCGImageDestinationLossyCompressionQuality
-                                                                                                                        as CIImageRepresentationOption : 0.9]) else {
+                                                                                                                        as CIImageRepresentationOption : 0.8]) else {
                         NSLog("Koleo: failed to guard let jpeg data")
                         return
                     }
                     mySocketServer?.sendDataToAllClients(jpegData)
+                    mySocketServer?.sendAcknowledged = false
                 }
             }
             
